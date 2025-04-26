@@ -1,5 +1,10 @@
 #include "esp-knx-common.h"
 
+unsigned long lastMicros = 0;
+uint8_t hardwareType[LEN_HARDWARE_TYPE] = {0};
+uint8_t firmwareVersion[LEN_HARDWARE_TYPE] = {0};
+bool knxDisabled = false;
+
 void keepCycleTime(uint16_t minCycleTimeMicros)
 {
     unsigned long cycleTime = micros() - lastMicros;
@@ -78,4 +83,9 @@ String getKnxAppDetails(void)
 {
     return "Firmware:  0x" + String(uint16_t(256)*hardwareType[2]+hardwareType[3], HEX) + ", Version: " + String(hardwareType[4]/16.0f,1) + 
            " App: 0x" + String(uint16_t(256)*firmwareVersion[2]+firmwareVersion[3], HEX) + ", Version: " + String(firmwareVersion[4]/16.0f,1);
+}
+
+bool getKnxActive(void)
+{
+    return knxDisabled == false;
 }
