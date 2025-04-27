@@ -65,15 +65,19 @@ void setFirmwareVersion(uint8_t openKnxId, uint8_t applicationNumber, uint8_t ap
 
 bool checkKnxApp(void)
 {
-    uint8_t* flashStart =  knx.bau().platform().getNonVolatileMemoryStart();
-    if (flashStart)
+    uint8_t NoOfElem = 1;
+    uint8_t *data;
+    uint32_t length;
+    knx.bau().propertyValueRead(OT_APPLICATION_PROG, 0, PID_PROG_VERSION, NoOfElem, 1, &data, length);
+    if(length == 5)
     {
-        memcpy(hardwareType, flashStart + 51, LEN_HARDWARE_TYPE);
+        memcpy(hardwareType, data, length);
+        delete[] data;
         // check if the firmware application is the same as the loaded application
         // check if the major version (x.0) is the same
         bool knxAppOk = memcmp(hardwareType, firmwareVersion, 4) == 0 && hardwareType[4]/16 == firmwareVersion[4]/16;
-        Serial.printf("Hardware type: %02X %02X %02X %02X %02X %02X\n", hardwareType[0], hardwareType[1], hardwareType[2], hardwareType[3], hardwareType[4], hardwareType[5]);
-        Serial.printf("Firmware type: %02X %02X %02X %02X %02X %02X\n", firmwareVersion[0], firmwareVersion[1], firmwareVersion[2], firmwareVersion[3], firmwareVersion[4], firmwareVersion[5]);
+        Serial.printf("Hardware type: %02X %02X %02X %02X %02X\n", hardwareType[0], hardwareType[1], hardwareType[2], hardwareType[3], hardwareType[4]);
+        Serial.printf("Firmware type: %02X %02X %02X %02X %02X\n", firmwareVersion[0], firmwareVersion[1], firmwareVersion[2], firmwareVersion[3], firmwareVersion[4]);
         return knxAppOk;
     }
     return false;
@@ -81,8 +85,8 @@ bool checkKnxApp(void)
 
 String getKnxAppDetails(void)
 {
-    return "Firmware:  0x" + String(uint16_t(256)*hardwareType[2]+hardwareType[3], HEX) + ", Version: " + String(hardwareType[4]/16.0f,1) + 
-           " App: 0x" + String(uint16_t(256)*firmwareVersion[2]+firmwareVersion[3], HEX) + ", Version: " + String(firmwareVersion[4]/16.0f,1);
+    return "Firmware:  0x" + String(uint16_t(256)*firmwareVersion[2]+firmwareVersion[3], HEX) + ", Version: " + String(firmwareVersion[4]/16.0f,1) + 
+           " Loaded App: 0x" + String(uint16_t(256)*hardwareType[2]+hardwareType[3], HEX) + ", Version: " + String(hardwareType[4]/16.0f,1);
 }
 
 bool getKnxActive(void)
