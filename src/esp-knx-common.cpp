@@ -85,8 +85,8 @@ bool checkKnxApp(void)
 
 String getKnxAppDetails(void)
 {
-    return "Firmware:  0x" + String(uint16_t(256)*firmwareVersion[2]+firmwareVersion[3], HEX) + ", Version: " + String(firmwareVersion[4]/16.0f,1) + 
-           " Loaded App: 0x" + String(uint16_t(256)*hardwareType[2]+hardwareType[3], HEX) + ", Version: " + String(hardwareType[4]/16.0f,1);
+    return "Firmware:  0x" + String(uint16_t(256)*firmwareVersion[2]+firmwareVersion[3], HEX) + ", Version: " + String(firmwareVersion[4]/16,DEC) + "." + String(firmwareVersion[4]%16,DEC) +
+           " Loaded App: 0x" + String(uint16_t(256)*hardwareType[2]+hardwareType[3], HEX) + ", Version: " + String(hardwareType[4]/16,DEC) + "." + String(hardwareType[4]%16,DEC);
 }
 
 bool getKnxActive(void)
