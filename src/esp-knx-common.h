@@ -16,3 +16,4 @@ void setFirmwareVersion(uint8_t openKnxId, uint8_t applicationNumber, uint8_t ap
 bool checkKnxApp();
 String getKnxAppDetails(void);
 bool getKnxActive(void);
+void restartDeviceCallback(void);

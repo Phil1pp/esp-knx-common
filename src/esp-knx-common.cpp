@@ -93,3 +93,9 @@ bool getKnxActive(void)
 {
     return knxDisabled == false;
 }
+
+void restartDeviceCallback()
+{
+    knx.bau().writeMemory();
+    ESP.restart();
+}
