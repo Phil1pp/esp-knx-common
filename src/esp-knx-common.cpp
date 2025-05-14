@@ -3,7 +3,7 @@
 unsigned long lastMicros = 0;
 uint8_t hardwareType[LEN_HARDWARE_TYPE] = {0};
 uint8_t firmwareVersion[LEN_HARDWARE_TYPE] = {0};
-bool knxDisabled = false;
+__knxModeOptions knxMode = KNX_MODE_NORMAL;
 
 void keepCycleTime(uint16_t minCycleTimeMicros)
 {
@@ -29,7 +29,7 @@ void setKnxHostname(const char *hostname)
 
 void setKnxMode(knxModeOptions_t state)
 {
-    knxDisabled = state == KNX_MODE_OFF;
+    knxMode = state;
     knx.progMode(state == KNX_MODE_PROG);
 }
 
@@ -44,14 +44,7 @@ String getKnxPhysAddr()
 
 knxModeOptions_t getKnxMode()
 {
-    if(knxDisabled)
-    {
-        return KNX_MODE_OFF;
-    }
-    else
-    {
-        return knx.progMode() ? KNX_MODE_PROG : KNX_MODE_NORMAL;
-    }
+    return knxMode;
 }
 
 void setFirmwareVersion(uint8_t openKnxId, uint8_t applicationNumber, uint8_t applicationVersion)
@@ -91,7 +84,23 @@ String getKnxAppDetails(void)
 
 bool getKnxActive(void)
 {
-    return knxDisabled == false;
+    return knxMode != KNX_MODE_OFF;
+}
+
+void knxProgLedOnCallback()
+{
+    if(knxMode != KNX_MODE_OFF)
+    {
+        knxMode = KNX_MODE_PROG;
+    }
+}
+
+void knxProgLedOffCallback()
+{
+    if(knxMode != KNX_MODE_OFF)
+    {
+        knxMode = KNX_MODE_NORMAL;
+    }
 }
 
 void restartDeviceCallback()

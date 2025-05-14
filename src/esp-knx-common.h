@@ -17,3 +17,5 @@ bool checkKnxApp();
 String getKnxAppDetails(void);
 bool getKnxActive(void);
 void restartDeviceCallback(void);
+void knxProgLedOnCallback(void);
+void knxProgLedOffCallback(void);
