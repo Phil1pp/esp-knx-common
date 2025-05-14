@@ -96,6 +96,6 @@ bool getKnxActive(void)
 
 void restartDeviceCallback()
 {
-    knx.bau().writeMemory();
+    //knx.bau().writeMemory();
     ESP.restart();
 }
