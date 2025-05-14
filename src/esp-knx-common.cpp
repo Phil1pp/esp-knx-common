@@ -36,10 +36,10 @@ void setKnxMode(knxModeOptions_t state)
 String getKnxPhysAddr()
 {
     uint16_t indAddr = knx.individualAddress();
-    uint8_t line = (indAddr >> 8) & 0x0F;
     uint8_t area = indAddr >> 12;
+    uint8_t line = (indAddr >> 8) & 0x0F;    
     uint8_t member = indAddr & 0xFF;
-    return String(line) + "." + String(area) + "." + String(member);
+    return String(area) + "." + String(line) + "." + String(member);
 }
 
 knxModeOptions_t getKnxMode()
